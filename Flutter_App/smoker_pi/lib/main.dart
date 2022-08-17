@@ -37,12 +37,12 @@ class _MyHomePageState extends State<MyHomePage> {
     final SharedPreferences prefs = await _prefs;
     // Search for the smoker pi
     // Check settings first for otherwise, check default smokerpi.local
-    final String pi = (prefs.getString('pi') ?? "smokerpi.local");
+    final String pi = (prefs.getString('pi') ?? "smokerpi.local:5000");
 
     // Check the api for a response
-    var url = Uri.http(pi, 'api/status');
+    var url = Uri.http(pi, 'status');
     try {
-      var response = await http.get(url);
+      var response = await http.get(Uri.parse("http://127.0.0.1:5000/status"));
       if (response.statusCode == 200) {
         return true;
       }
