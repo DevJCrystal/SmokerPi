@@ -31,19 +31,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool needs_init = false;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   Future<bool> findSmokerPi() async {
     final SharedPreferences prefs = await _prefs;
     // Search for the smoker pi
     // Check settings first for otherwise, check default smokerpi.local
-    final String pi = (prefs.getString('pi') ?? "smokerpi.local:5000");
+    final String pi = (prefs.getString('pi') ?? "127.0.0.1:5000");
 
     // Check the api for a response
     var url = Uri.http(pi, 'status');
     try {
-      var response = await http.get(Uri.parse("http://127.0.0.1:5000/status"));
+      var response = await http.get(url);
       if (response.statusCode == 200) {
+        needs_init = true;
         return true;
       }
     } catch (e) {
